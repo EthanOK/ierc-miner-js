@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "cli": "ts-node src/cli.ts"
+    "cli": "ts-node src/cli.ts",
+    "mint":"yarn cli mine ierc-m4 --account 0x6278A1E803A76796a3A1f7F6344fE874ebfe94B2"
   },
   "keywords": [],
   "author": "",
