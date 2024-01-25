@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "cli": "ts-node src/cli.ts"
+    "cli": "ts-node src/cli.ts",
+    "get config": "yarn cli wallet --all",
+    "mint ierc-m4": "yarn cli mine ierc-m4 --account 0x6278A1E803A76796a3A1f7F6344fE874ebfe94B2",
+    "mint ethpi": "yarn cli mint-pow 0x0000 --account 0x000000B1cf3c8Df89d748DcBEA3C970E1bcf4039",
+    "mint ethv": "yarn cli mine ethv --account 0x000000B1cf3c8Df89d748DcBEA3C970E1bcf4039"
   },
   "keywords": [],
   "author": "",

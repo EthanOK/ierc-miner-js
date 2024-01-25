@@ -18,7 +18,13 @@ let unique = 0;
 let toMintBlockNumber = 0;
 export const runMintPow = async (workc: string, options: IMineOptions) => {
   sayMinerLog();
-  if (!(workc.length >= 6 && workc.length <= 22 && ethers.utils.isHexString(workc))) {
+  if (
+    !(
+      workc.length >= 6 &&
+      workc.length <= 22 &&
+      ethers.utils.isHexString(workc)
+    )
+  ) {
     throw new Error("The workc is invalid");
   }
   const { account } = options;
@@ -34,23 +40,33 @@ This mining user configuration was not found!
   }
 
   printer.trace(`Start mining with ${account}`);
-  const { privateKey } = await DataBase.miner.getObject<{ privateKey: string }>(`/${account}`);
+  const { privateKey } = await DataBase.miner.getObject<{ privateKey: string }>(
+    `/${account}`
+  );
   const provider = new ethers.providers.JsonRpcProvider(PROVIDER_RPC);
   const miner = new ethers.Wallet(privateKey, provider);
 
-  const [network, currentGasPrice, blockNumber, nonce, balance] = await Promise.all([
-    provider.getNetwork(),
-    provider.getGasPrice(),
-    provider.getBlockNumber(),
-    miner.getTransactionCount(),
-    miner.getBalance(),
-  ]);
+  const [network, currentGasPrice, blockNumber, nonce, balance] =
+    await Promise.all([
+      provider.getNetwork(),
+      provider.getGasPrice(),
+      provider.getBlockNumber(),
+      miner.getTransactionCount(),
+      miner.getBalance(),
+    ]);
   printer.trace(`network is ${network.name} (chainID: ${network.chainId})`);
   const targetGasFee = currentGasPrice.div(100).mul(GAS_PREMIUM);
 
-  printer.trace(`Current gas price usage ${bnUtils.fromWei(targetGasFee.toString(), 9)} gwei`);
+  printer.trace(
+    `Current gas price usage ${bnUtils.fromWei(
+      targetGasFee.toString(),
+      9
+    )} gwei`
+  );
   printer.trace(`nonce is ${nonce}`);
-  printer.trace(`balance is ${bnUtils.fromWei(balance.toString(), 18).dp(4).toString()}`);
+  printer.trace(
+    `balance is ${bnUtils.fromWei(balance.toString(), 18).dp(4).toString()}`
+  );
 
   const spinnies = new Spinnies();
   printer.trace(`The current mining difficulty is ${workc}`);
@@ -80,7 +96,7 @@ This mining user configuration was not found!
           p: "ierc-pow",
           op: "mint",
           tick: tick,
-          // use_point: '0',
+          // use_point: "1000",
           block: String(toMintBlockNumber),
           nonce: `${generateNonce()}`,
         })}`
@@ -129,7 +145,9 @@ This mining user configuration was not found!
       });
       const mineTime = (Date.now() - startTimer) / 1000;
       printer.info(
-        `Total time spent ${mineTime}s, average arithmetic ${Math.ceil(mineCount / mineTime)} c/s`
+        `Total time spent ${mineTime}s, average arithmetic ${Math.ceil(
+          mineCount / mineTime
+        )} c/s`
       );
       // console.log("🚀 ~ transaction:", transaction)
       const realTransaction = await miner.sendTransaction(transaction);
